@@ -1,4 +1,4 @@
-# renai-back-stage-management-
+# renai-back-stage-management
 
 
 1 npm install vue-template-compiler -D
