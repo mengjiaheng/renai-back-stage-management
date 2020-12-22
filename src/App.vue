@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-12-15 16:27:10
+ * @LastEditTime: 2020-12-17 21:46:27
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \renai-back-stage-management\src\App.vue
+-->
 <template>
   <div id="app">
     <router-view/>
@@ -6,6 +14,8 @@
 
 <script>
 import util from '@/libs/util'
+
+
 export default {
   name: 'app',
   watch: {

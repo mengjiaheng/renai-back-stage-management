@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-15 16:27:10
- * @LastEditTime: 2020-12-15 17:19:18
+ * @LastEditTime: 2020-12-18 18:19:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \renai-back-stage-management\src\layout\header-aside\components\header-user\index.vue
@@ -12,7 +12,7 @@
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item @click.native="logOff">
         <d2-icon name="power-off" class="d2-mr-5"/>
-        注销
+        退出
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>

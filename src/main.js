@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-12-15 16:27:10
+ * @LastEditTime: 2020-12-18 17:33:10
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \renai-back-stage-management\src\main.js
+ */
 // Vue
 import Vue from 'vue'
 import i18n from './i18n'
@@ -6,6 +14,9 @@ import App from './App'
 import d2Admin from '@/plugin/d2admin'
 // store
 import store from '@/store/index'
+
+//心特效
+import './assets/words.js';
 
 // 菜单和路由设置
 import router from './router'

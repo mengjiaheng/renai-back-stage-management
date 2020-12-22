@@ -286,7 +286,7 @@ var port = require("../../../apiconf");
 import Identify from "./identify";
 // import CryptoJS from "crypto-js";
 import { Encrypt, Decrypt } from "../../../aes";
-import md5 from 'crypto-js/md5';
+import md5 from "crypto-js/md5";
 
 export default {
   mixins: [localeMixin],
@@ -363,12 +363,9 @@ export default {
     };
   },
   mounted() {
+    this.withoutCodeLogin();
     // 初始化验证码
-    this.identifyCode = "";
-    this.makeCode(this.identifyCodes, 4);
-    this.timeInterval = setInterval(() => {
-      this.refreshTime();
-    }, 1000);
+    this.initCode();
   },
   // created() {
   //   this.refreshCode();
@@ -384,8 +381,26 @@ export default {
     handleClose() {
       // this.dialogFormVisible=false
     },
+    //免密登录
+    withoutCodeLogin() {
+      let usernameemail = localStorage.getItem(md5("usernameemail"));
+      if (usernameemail != "" && usernameemail != null) {
+        this.login({
+          username: "admin",
+          password: "admin",
+        });
+        this.$router.replace(this.$route.query.redirect || "/");
+      }
+    },
     //验证码
     // 重置验证码
+    initCode() {
+      this.identifyCode = "";
+      this.makeCode(this.identifyCodes, 4);
+      this.timeInterval = setInterval(() => {
+        this.refreshTime();
+      }, 1000);
+    },
     refreshCode() {
       this.identifyCode = "";
       this.makeCode(this.identifyCodes, 4);
@@ -485,8 +500,8 @@ export default {
               let resData = Decrypt(res.data, time.toString());
               // 成功，返回数据
               if (resData.statuscode == 200) {
-                localStorage.setItem(md5("nickname"),resData.nickname)
-                localStorage.setItem(md5("usernameemail"),this.formLogin.userNameEmail)
+                localStorage.setItem(md5("nickname"), resData.nickname);
+                localStorage.setItem(md5("usernameemail"), this.formLogin.userNameEmail);
                 this.$router.replace(this.$route.query.redirect || "/");
 
                 this.$message({
@@ -498,13 +513,13 @@ export default {
                   message: "密码错误",
                   type: "warning",
                 });
-                this.refreshCode()
+                this.refreshCode();
               } else {
                 this.$message({
                   message: "登录失败，请稍后再试",
                   type: "warning",
                 });
-                this.refreshCode()
+                this.refreshCode();
               }
             })
             .catch((err) => {
@@ -514,7 +529,7 @@ export default {
                 message: "网络异常，请稍后再试",
                 type: "warning",
               });
-              console.log("神马错误呀",err)
+              console.log("神马错误呀", err);
             });
         } else {
           this.$message({
@@ -854,6 +869,19 @@ export default {
 <style lang="scss">
 .login-code {
   cursor: pointer;
+}
+//爱心
+#login {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+//不知名特效
+canvas {
+  background: rgb(226, 225, 225);
+  opacity: 0.3;
 }
 .page-login {
   @extend %unable-select;

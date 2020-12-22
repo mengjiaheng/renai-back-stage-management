@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-12-15 16:27:11
+ * @LastEditTime: 2020-12-15 20:47:22
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \renai-back-stage-management\src\plugin\d2admin\index.js
+ */
 // Element
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -26,7 +34,7 @@ export default {
     // 当前的 baseUrl
     Vue.prototype.$baseUrl = process.env.BASE_URL
     // 当前版本
-    Vue.prototype.$version = process.env.VUE_APP_VERSION
+    // Vue.prototype.$version = process.env.VUE_APP_VERSION
     // 构建时间
     Vue.prototype.$buildTime = process.env.VUE_APP_BUILD_TIME
     // Element

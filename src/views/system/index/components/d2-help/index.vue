@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-12-15 16:27:11
+ * @LastEditTime: 2020-12-15 21:32:27
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \renai-back-stage-management\src\views\system\index\components\d2-help\index.vue
+-->
 <template>
   <div>
     <el-button type="primary" @click="dialogVisible = true" plain round>
@@ -10,10 +18,10 @@
       :visible.sync="dialogVisible"
       :append-to-body="true">
       <div style="margin-top: -25px;">
-        <h2 class="d2-mt-0">
+        <!-- <h2 class="d2-mt-0">
           这里有一些参考资料
-        </h2>
-        <el-button-group>
+        </h2> -->
+        <!-- <el-button-group>
           <el-button @click="$open('https://d2.pub/zh/doc/d2-admin')">
             <d2-icon name="book" class="d2-mr-5"/>
             文档
@@ -26,18 +34,18 @@
             <d2-icon name="plus" class="d2-mr-5"/>
             提交问题
           </el-button>
-        </el-button-group>
+        </el-button-group> -->
         <h2>询问其它使用者或作者</h2>
         <el-row :gutter="20">
           <el-col :span="12">
-            <img src="./image/qq.svg" style="width: 100%;">
+            <img src="./image/mjh.jpg" style="width: 100%;">
             <div class="d2-help--qr-info">
               请使用手机 QQ 扫面上方二维码<br/>
               1群 806395827 (满) | 2群 592981556
             </div>
           </el-col>
           <el-col :span="12">
-            <img src="./image/we.svg" style="width: 100%;">
+            <img src="./image/mjh.jpg" style="width: 100%;">
             <div class="d2-help--qr-info">
               请使用手机微信扫面上方二维码<br/>
               添加作者微信好友，邀请加入微信群
