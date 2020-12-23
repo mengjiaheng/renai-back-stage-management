@@ -1,8 +1,6 @@
 # renai-back-stage-management
 
 
-1 npm install vue-template-compiler -D
+第一次下载项目后一定要先：npm install
 
-2 npm install
-
-3 npm run dev
+运行可以使用： npm run dev 或 npm run start 或 npm run serve    
