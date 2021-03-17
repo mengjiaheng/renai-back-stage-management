@@ -33,8 +33,10 @@ export default {
       // uuid 是用户身份唯一标识 用户注册的时候确定 并且不可改变 不可重复
       // token 代表用户当前登录状态 建议在网络请求中携带 token
       // 如有必要 token 需要定时更新，默认保存一天
-      util.cookies.set('uuid', res.uuid)
-      util.cookies.set('token', res.token)
+      // util.cookies.set('uuid', res.uuid)
+      // util.cookies.set('token', res.token)
+      sessionStorage.setItem("uuid",res.uuid)
+      sessionStorage.setItem("token",res.token)
       // 设置 vuex 用户信息
       await dispatch('d2admin/user/set', { name: res.name }, { root: true })
       // 用户登录后从持久化数据加载一系列的设置
@@ -50,9 +52,9 @@ export default {
        * @description 注销
        */
       async function logout() {
-        // 删除cookie
-        util.cookies.remove('token')
-        util.cookies.remove('uuid')
+        // // 删除cookie
+        // util.cookies.remove('token')
+        // util.cookies.remove('uuid')
         // 清空 vuex 用户信息
         await dispatch('d2admin/user/set', {}, { root: true })
         // 跳转路由
@@ -61,16 +63,18 @@ export default {
       // 判断是否需要确认
       if (confirm) {
         commit('d2admin/gray/set', true, { root: true })
-        MessageBox.confirm('确定要注销当前用户吗', '注销用户', { type: 'warning' })
+        MessageBox.confirm('确定要退出当前用户吗', '退出用户', { type: 'warning' })
           .then(() => {
-            localStorage.removeItem(md5("nickname")); //移除localStorage 
-            localStorage.removeItem(md5("usernameemail"));
+            sessionStorage.removeItem(md5("adminEmail"))
+            sessionStorage.removeItem(md5("adminToken"))
+            sessionStorage.removeItem("token")
+            sessionStorage.removeItem("uuid")
             commit('d2admin/gray/set', false, { root: true })
             logout()
           })
           .catch(() => {
             commit('d2admin/gray/set', false, { root: true })
-            Message({ message: '取消注销操作' })
+            Message({ message: '取消退出操作', type: "warning" })
           })
       } else {
         logout()

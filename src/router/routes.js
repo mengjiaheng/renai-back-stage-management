@@ -21,6 +21,53 @@ const frameIn = [
         },
         component: _import('system/index')
       },
+      //前台用户管理
+      {
+        path: 'admin-usermess',
+        name: 'admin-usermess',
+        meta: {
+          title: '用户信息管理',
+          auth: true
+        },
+        component: _import('login-register/admin-usermess')
+      },
+      {
+        path: 'register-applyfor',
+        name: 'register-applyfor',
+        meta: {
+          title: '用户注册申请',
+          auth: true
+        },
+        component: _import('login-register/register-applyfor')
+      },
+      {
+        path: 'amend-email-applyfor',
+        name: 'amend-email-applyfor',
+        meta: {
+          title: '用户邮箱变更申请',
+          auth: true
+        },
+        component: _import('login-register/amend-email-applyfor')
+      },
+      {
+        path: 'logout-applyfor',
+        name: 'logout-applyfor',
+        meta: {
+          title: '用户注销申请',
+          auth: true
+        },
+        component: _import('login-register/logout-applyfor')
+      },
+      //社团展示信息管理
+      {
+        path: 'clud-intro',
+        name: 'clud-intro',
+        meta: {
+          title: '社团简介管理',
+          auth: true
+        },
+        component: _import('club-mess-show-admin/clud-intro')
+      },
       // 演示页面
       {
         path: 'page1',

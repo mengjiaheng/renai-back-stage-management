@@ -8,7 +8,7 @@
 -->
 <template>
   <el-dropdown size="small" class="d2-mr">
-    <span class="btn-text">{{`${this.nickname}`}}</span>
+    <span class="btn-text">{{`${this.AdminEmail}`}}</span>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item @click.native="logOff">
         <d2-icon name="power-off" class="d2-mr-5"/>
@@ -25,11 +25,11 @@ import md5 from 'crypto-js/md5';
 export default {
   data(){
     return{
-      nickname:""
+      AdminEmail:""
     }
   },
   mounted() {
-    this.nickname=localStorage.getItem(md5("nickname"))
+    this.AdminEmail=sessionStorage.getItem(md5("adminEmail"))
   },
   computed: {
     ...mapState('d2admin/user', [

@@ -15,7 +15,7 @@ function createService () {
     config => config,
     error => {
       // 发送失败
-      console.log(error)
+      console.log("不知名的console：",error)
       return Promise.reject(error)
     }
   )
@@ -26,6 +26,7 @@ function createService () {
       const dataAxios = response.data
       // 这个状态码是和后端约定的
       const { code } = dataAxios
+      // console.log("code测试",code,response.data)
       // 根据 code 进行判断
       if (code === undefined) {
         // 如果没有 code 代表这不是项目后端开发的接口 比如可能是 D2Admin 请求最新版本
@@ -76,7 +77,8 @@ function createService () {
  */
 function createRequestFunction (service) {
   return function (config) {
-    const token = util.cookies.get('token')
+    // const token = util.cookies.get('token')
+    const token = sessionStorage.getItem('token')
     const configDefault = {
       headers: {
         Authorization: token,

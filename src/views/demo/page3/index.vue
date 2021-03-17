@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-15 16:27:11
- * @LastEditTime: 2020-12-22 21:09:16
+ * @LastEditTime: 2021-01-19 14:45:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \renai-back-stage-management\src\views\demo\page3\index.vue
@@ -63,6 +63,7 @@ export default {
       console.log("测试保存功能")
     },
     change(value, render) {
+      
       //实时获取转成html的数据
       this.html = render;
       // console.log(this.html);

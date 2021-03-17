@@ -27,11 +27,11 @@
                   :model="formLogin"
                   size="default"
                 >
-                  <el-form-item prop="userNameEmail">
+                  <el-form-item prop="userEmail">
                     <el-input
                       type="text"
-                      v-model="formLogin.userNameEmail"
-                      placeholder="用户名或邮箱"
+                      v-model="formLogin.userEmail"
+                      placeholder="注册邮箱"
                     >
                       <i slot="prepend" class="fa fa-user-circle-o"></i>
                     </el-input>
@@ -93,8 +93,9 @@
             <p class="page-login--content-footer-copyright">
               Copyright
               <d2-icon name="copyright" />
-              2020 南阳理工学院18级软设三班孟家恒出品
-              <a href="https://github.com/FairyEver"> @mjh </a>
+              <a href="https://github.com/mengjiaheng" target="blank"
+                >2021 南阳理工学院计算机与软件学院仁爱工作室孟家恒出品 @mjh
+              </a>
             </p>
             <p class="page-login--content-footer-options">
               <a href="#">帮助</a>
@@ -112,20 +113,14 @@
     >
       <div class="page-register--form">
         <form>
+          <br />
+          <br />
           <h3 class="register-form-style">输入注册信息</h3>
           <el-input
             type="text"
-            prefix-icon="el-icon-user"
-            v-model="formRegister.username"
-            placeholder="用户名"
-          ></el-input>
-          <br />
-          <br />
-          <el-input
-            type="text"
-            prefix-icon="el-icon-edit"
-            v-model="formRegister.nickname"
-            placeholder="昵称"
+            prefix-icon="el-icon-message"
+            v-model="formRegister.useremail"
+            placeholder="注册邮箱(暂不支持谷歌，微软邮箱)"
           ></el-input>
           <br />
           <br />
@@ -145,16 +140,11 @@
           ></el-input>
           <br />
           <br />
-          <!-- <el-input
-            type="number"
-            v-model="formRegister.userphone"
-            placeholder="手机号"
-          ></el-input> -->
           <el-input
             type="text"
-            prefix-icon="el-icon-message"
-            v-model="formRegister.useremail"
-            placeholder="邮箱"
+            prefix-icon="el-icon-view"
+            v-model="formRegister.renaicode"
+            placeholder="请输入注册码"
           ></el-input>
           <br />
           <br />
@@ -179,7 +169,7 @@
             <el-button
               type="submit"
               class="button-login-create-back"
-              @click="submitRegisterForm"
+              @click="submitRegisterForm()"
             >
               <span style="color: white">注册</span>
             </el-button>
@@ -307,7 +297,7 @@ export default {
       time: dayjs().format("HH:mm:ss"),
       // 登录表单
       formLogin: {
-        userNameEmail: "",
+        userEmail: "",
         password: "",
         code: "",
       },
@@ -326,11 +316,10 @@ export default {
 
       //注册表单
       formRegister: {
-        nickname: "",
-        username: "",
+        useremail: "",
         password: "",
         password1: "",
-        useremail: "",
+        renaicode: "",
         emailcode: "",
       },
       //登录验证码用
@@ -338,10 +327,10 @@ export default {
       identifyCode: "",
       // 表单校验
       rules: {
-        userNameEmail: [
+        userEmail: [
           {
             required: true,
-            message: "请输入用户名或邮箱",
+            message: "请输入邮箱",
             trigger: "blur",
           },
         ],
@@ -383,8 +372,8 @@ export default {
     },
     //免密登录
     withoutCodeLogin() {
-      let usernameemail = localStorage.getItem(md5("usernameemail"));
-      if (usernameemail != "" && usernameemail != null) {
+      let userEmail = localStorage.getItem(md5("userEmail"));
+      if (userEmail != "" && userEmail != null) {
         this.login({
           username: "admin",
           password: "admin",
@@ -401,6 +390,7 @@ export default {
         this.refreshTime();
       }, 1000);
     },
+    //点击刷新验证码
     refreshCode() {
       this.identifyCode = "";
       this.makeCode(this.identifyCodes, 4);
@@ -477,17 +467,22 @@ export default {
             password: "admin",
           });
           this.loginLoad = true;
-          let time = Date.parse(new Date());
-          let api = port.login + "?time=" + time;
+          // let time = Date.parse(new Date());
+          // let api = port.login + "?time=" + time;
+          let api = port.login;
           Axios.post(
             api,
-            Encrypt(
-              JSON.stringify({
-                usernameemail: this.formLogin.userNameEmail,
-                password: this.formLogin.password,
-              }),
-              time.toString()
-            ),
+            // Encrypt(
+            //   JSON.stringify({
+            //     userEmail: this.formLogin.userEmail,
+            //     password: this.formLogin.password,
+            //   }),
+            //   time.toString()
+            // ),
+            JSON.stringify({
+              userEmail: this.formLogin.userEmail,
+              password: this.formLogin.password,
+            }),
             {
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -497,18 +492,19 @@ export default {
           )
             .then((res) => {
               this.loginLoad = false;
-              let resData = Decrypt(res.data, time.toString());
+              // let resData = Decrypt(res.data, time.toString());
+              let resData = res.data;
               // 成功，返回数据
               if (resData.statuscode == 200) {
-                localStorage.setItem(md5("nickname"), resData.nickname);
-                localStorage.setItem(md5("usernameemail"), this.formLogin.userNameEmail);
+                sessionStorage.setItem(md5("adminEmail"), this.formLogin.userEmail);
+                sessionStorage.setItem(md5("adminToken"), resData.token);
                 this.$router.replace(this.$route.query.redirect || "/");
 
                 this.$message({
                   message: "登陆成功",
                   type: "success",
                 });
-              } else if (resData.statuscode == 212) {
+              } else if (resData.statuscode == 210) {
                 this.$message({
                   message: "密码错误",
                   type: "warning",
@@ -560,17 +556,22 @@ export default {
             });
             return false;
           }
-          let time = Date.parse(new Date());
-          let api = port.amendpwd + "?time=" + time;
+          // let time = Date.parse(new Date());
+          // let api = port.amendpwd + "?time=" + time;
+          let api = port.amendpwd;
           Axios.post(
             api,
-            Encrypt(
-              JSON.stringify({
-                useremail: this.formForgetPwd.useremail,
-                password: this.formForgetPwd.password,
-              }),
-              time.toString()
-            ),
+            // Encrypt(
+            //   JSON.stringify({
+            //     useremail: this.formForgetPwd.useremail,
+            //     password: this.formForgetPwd.password,
+            //   }),
+            //   time.toString()
+            // ),
+            JSON.stringify({
+              adminemail: this.formForgetPwd.useremail,
+              password: this.formForgetPwd.password,
+            }),
             {
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -579,7 +580,8 @@ export default {
             }
           )
             .then((res) => {
-              let resData = Decrypt(res.data, time.toString());
+              // let resData = Decrypt(res.data, time.toString());
+              let resData = res.data;
               // 成功，返回数据
               if (resData.statuscode == 200) {
                 this.$message({
@@ -591,6 +593,11 @@ export default {
                 this.formForgetPwd.emailcode = "";
                 this.formForgetPwd.password = "";
                 this.formForgetPwd.password1 = "";
+              } else if (resData.statuscode == 212) {
+                this.$message({
+                  message: "邮箱未注册",
+                  type: "warning",
+                });
               } else {
                 this.$message({
                   message: "修改失败，请稍后再试",
@@ -611,24 +618,13 @@ export default {
     },
     //提交注册表单
     submitRegisterForm() {
-      //判断用户名格式
-      var s = this.formRegister.username.substring(0, 1);
-      var reg = /^[0-9a-zA-Z]+$/;
-      if (!reg.test(this.formRegister.username) || ("0" <= s && s <= "9")) {
-        this.$message({
-          message: "注册失败，用户名只能是英文开头加数字",
-          type: "warning",
-        });
-        this.formRegister.username = "";
-        return false;
-      }
+      //判断邮箱格式
 
       //判断注册信息是否完整
       if (
-        this.formRegister.nickname == "" ||
-        this.formRegister.username == "" ||
-        this.formRegister.password == "" ||
         this.formRegister.useremail == "" ||
+        this.formRegister.password == "" ||
+        this.formRegister.password1 == "" ||
         this.formRegister.emailcode == ""
       ) {
         this.$message({
@@ -647,20 +643,27 @@ export default {
         return false;
       }
 
-      let time = Date.parse(new Date());
-      var api = port.register + "?time=" + time;
+      // let time = Date.parse(new Date());
+      // var api = port.register + "?time=" + time;
+      var api = port.register;
       Axios.post(
         api,
-        Encrypt(
-          JSON.stringify({
-            username: this.formRegister.username,
-            nickname: this.formRegister.nickname,
-            password: this.formRegister.password,
-            useremail: this.formRegister.useremail,
-            emailcode: this.formRegister.emailcode,
-          }),
-          time.toString()
-        ),
+        // Encrypt(
+        //   JSON.stringify({
+        //     username: this.formRegister.username,
+        //     nickname: this.formRegister.nickname,
+        //     password: this.formRegister.password,
+        //     useremail: this.formRegister.useremail,
+        //     emailcode: this.formRegister.emailcode,
+        //   }),
+        //   time.toString()
+        // ),
+        JSON.stringify({
+          useremail: this.formRegister.useremail,
+          password: this.formRegister.password,
+          renaicode: "renainiubi",
+          emailcode: this.formRegister.emailcode,
+        }),
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -670,17 +673,16 @@ export default {
       )
 
         .then((res) => {
-          let resData = Decrypt(res.data, time.toString());
+          // let resData = Decrypt(res.data, time.toString());
+          let resData = res.data;
           // 成功，返回数据
           if (resData.statuscode == 200) {
             this.$message({
               message: "注册成功",
               type: "success",
             });
-            this.formLogin.userNameEmail = this.formRegister.username;
+            this.formLogin.userEmail = this.formRegister.useremail;
             this.formLogin.password = this.formRegister.password;
-            this.formRegister.username = "";
-            this.formRegister.nickname = "";
             this.formRegister.password = "";
             this.formRegister.password1 = "";
             this.formRegister.useremail = "";
@@ -688,40 +690,37 @@ export default {
             // 返回登录页面
             this.isShow = !this.isShow;
             this.isTrue = !this.isTrue;
-            return false;
+            // return false;
           } else if (resData.statuscode == 210) {
             this.$message({
               message: "邮箱验证码错误",
               type: "warning",
             });
-            return false;
+            // return false;
           } else if (resData.statuscode == 211) {
             this.$message({
-              message: "用户名已存在",
+              message: "注册码错误",
               type: "warning",
             });
-            return false;
+            // return false;
           } else if (resData.statuscode == 212) {
             this.$message({
               message: "邮箱已存在",
               type: "warning",
             });
-            return false;
+            // return false;
           } else {
             this.$message({
               message: "注册失败，请稍后再试",
               type: "warning",
             });
-            this.formRegister.nickname = "";
-            this.formRegister.username = "";
             this.formRegister.password = "";
             this.formRegister.password1 = "";
-            this.formRegister.userphone = "";
             this.formRegister.useremail = "";
             this.formRegister.emailcode = "";
-            return false;
+            // return false;
           }
-          Object.assign(this.$data.formRegister, this.$options.data().formRegister);
+          // Object.assign(this.$data.formRegister, this.$options.data().formRegister);
         })
         .catch((err) => {
           // 失败
